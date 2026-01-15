@@ -60,12 +60,12 @@ export function SettingsMenu(props: SettingsMenuProps) {
 
   console.log('Recording state:', { livekitIsRecording, localRecordingState, isRecording });
 
-  // Sync local state with LiveKit state when it changes
+  // Sync local state with LiveKit state when LiveKit catches up
   React.useEffect(() => {
-    if (livekitIsRecording !== localRecordingState && localRecordingState !== null) {
-      // LiveKit state caught up, clear local override
+    // Only clear local override when LiveKit has caught up to our expected state
+    if (localRecordingState !== null && livekitIsRecording === localRecordingState) {
+      console.log('LiveKit caught up, clearing local override');
       setLocalRecordingState(null);
-      setProcessingRecRequest(false);
     }
   }, [livekitIsRecording, localRecordingState]);
 
