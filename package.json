@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:cloudflare": "next build && npx @opennextjs/cloudflare build",
+    "build:cloudflare": "next build && npx @opennextjs/cloudflare build && node scripts/post-build.mjs",
     "preview": "pnpm build:cloudflare && wrangler pages dev .open-next --port 8788",
     "deploy": "pnpm build:cloudflare && wrangler pages deploy .open-next",
     "start": "next start",

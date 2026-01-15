@@ -1,5 +1,5 @@
 name = "hopus-meet"
-compatibility_date = "2024-09-23"
+compatibility_date = "2024-12-30"
 compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = ".open-next"
 
@@ -16,10 +16,3 @@ vars = { ENVIRONMENT = "production" }
 # - LIVEKIT_API_KEY
 # - LIVEKIT_API_SECRET
 # - LIVEKIT_URL (can be plain text)
-#
-# Optional secrets for recording functionality:
-# - S3_KEY_ID
-# - S3_KEY_SECRET
-# - S3_BUCKET
-# - S3_ENDPOINT
-# - S3_REGION
