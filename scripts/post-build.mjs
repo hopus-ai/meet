@@ -4,7 +4,7 @@
  * Fixes static asset paths for @opennextjs/cloudflare v1.2.1
  */
 
-import { cpSync, writeFileSync, existsSync, symlinkSync, unlinkSync } from 'fs';
+import { cpSync, writeFileSync, existsSync, copyFileSync, unlinkSync } from 'fs';
 import { join } from 'path';
 
 const openNextDir = join(process.cwd(), '.open-next');
@@ -40,19 +40,19 @@ const routesJson = {
 console.log('Creating _routes.json...');
 writeFileSync(join(openNextDir, '_routes.json'), JSON.stringify(routesJson, null, 2));
 
-// Create _worker.js symlink for Pages
+// Copy worker.js to _worker.js for Pages (symlinks not supported)
 const workerPath = join(openNextDir, 'worker.js');
-const workerSymlink = join(openNextDir, '_worker.js');
+const workerCopy = join(openNextDir, '_worker.js');
 
 if (existsSync(workerPath)) {
-  console.log('Creating _worker.js symlink...');
+  console.log('Copying worker.js to _worker.js...');
   try {
-    if (existsSync(workerSymlink)) {
-      unlinkSync(workerSymlink);
+    if (existsSync(workerCopy)) {
+      unlinkSync(workerCopy);
     }
-    symlinkSync('worker.js', workerSymlink);
+    copyFileSync(workerPath, workerCopy);
   } catch (e) {
-    console.error('Failed to create symlink:', e.message);
+    console.error('Failed to copy worker.js:', e.message);
   }
 }
 
