@@ -19,7 +19,7 @@ export interface ParticipantInfo {
 }
 
 /**
- * Egress status codes
+ * Egress status - can be string or number depending on API version
  */
 export enum EgressStatus {
   EGRESS_STARTING = 0,
@@ -29,6 +29,16 @@ export enum EgressStatus {
   EGRESS_FAILED = 4,
   EGRESS_ABORTED = 5,
   EGRESS_LIMIT_REACHED = 6,
+}
+
+/**
+ * Check if egress status indicates active recording
+ */
+export function isEgressActive(status: EgressStatus | string | number): boolean {
+  if (typeof status === 'string') {
+    return status === 'EGRESS_STARTING' || status === 'EGRESS_ACTIVE';
+  }
+  return status === EgressStatus.EGRESS_STARTING || status === EgressStatus.EGRESS_ACTIVE;
 }
 
 /**

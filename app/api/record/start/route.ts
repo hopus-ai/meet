@@ -1,4 +1,4 @@
-import { EgressClient, EgressStatus } from '@/lib/livekit-egress';
+import { EgressClient, isEgressActive } from '@/lib/livekit-egress';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
@@ -43,9 +43,7 @@ export async function GET(req: NextRequest) {
 
     // Check for existing active recordings
     const existingEgresses = await egressClient.listEgress({ roomName });
-    const activeEgress = existingEgresses.find(
-      (e) => e.status === EgressStatus.EGRESS_STARTING || e.status === EgressStatus.EGRESS_ACTIVE
-    );
+    const activeEgress = existingEgresses.find((e) => isEgressActive(e.status));
 
     if (activeEgress) {
       return new NextResponse('Meeting is already being recorded', { status: 409 });

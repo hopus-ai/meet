@@ -1,4 +1,4 @@
-import { EgressClient, EgressStatus } from '@/lib/livekit-egress';
+import { EgressClient, isEgressActive } from '@/lib/livekit-egress';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
@@ -30,9 +30,7 @@ export async function GET(req: NextRequest) {
 
     // Get active egress sessions for the room
     const egresses = await egressClient.listEgress({ roomName });
-    const activeEgresses = egresses.filter(
-      (info) => info.status === EgressStatus.EGRESS_STARTING || info.status === EgressStatus.EGRESS_ACTIVE
-    );
+    const activeEgresses = egresses.filter((info) => isEgressActive(info.status));
 
     if (activeEgresses.length === 0) {
       return new NextResponse('No active recording found', { status: 404 });
