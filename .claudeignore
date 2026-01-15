@@ -1,0 +1,16 @@
+# Ignore binary/image files that cause issues with Claude Code
+public/background-images/
+public/images/
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.ico
+*.svg
+*.webp
+
+# Build outputs
+.next/
+.open-next/
+node_modules/
+.wrangler/

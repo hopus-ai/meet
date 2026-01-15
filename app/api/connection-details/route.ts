@@ -1,7 +1,7 @@
 import { randomString } from '@/lib/client-utils';
 import { getLiveKitURL } from '@/lib/getLiveKitURL';
+import { generateLiveKitToken, TokenOptions, VideoGrant } from '@/lib/livekit-jwt';
 import { ConnectionDetails } from '@/lib/types';
-import { AccessToken, AccessTokenOptions, VideoGrant } from 'livekit-server-sdk';
 import { NextRequest, NextResponse } from 'next/server';
 
 const API_KEY = process.env.LIVEKIT_API_KEY;
@@ -66,9 +66,14 @@ export async function GET(request: NextRequest) {
   }
 }
 
-function createParticipantToken(userInfo: AccessTokenOptions, roomName: string) {
-  const at = new AccessToken(API_KEY, API_SECRET, userInfo);
-  at.ttl = '5m';
+async function createParticipantToken(
+  userInfo: TokenOptions,
+  roomName: string,
+): Promise<string> {
+  if (!API_KEY || !API_SECRET) {
+    throw new Error('LIVEKIT_API_KEY or LIVEKIT_API_SECRET is not defined');
+  }
+
   const grant: VideoGrant = {
     room: roomName,
     roomJoin: true,
@@ -76,8 +81,9 @@ function createParticipantToken(userInfo: AccessTokenOptions, roomName: string) 
     canPublishData: true,
     canSubscribe: true,
   };
-  at.addGrant(grant);
-  return at.toJwt();
+
+  // Use Cloudflare-compatible JWT generation (5 minutes TTL)
+  return generateLiveKitToken(API_KEY, API_SECRET, userInfo, grant, 5 * 60);
 }
 
 function getCookieExpirationTime(): string {

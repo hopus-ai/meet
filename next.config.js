@@ -5,6 +5,9 @@ const nextConfig = {
   images: {
     formats: ['image/webp'],
   },
+  experimental: {
+    esmExternals: 'loose',
+  },
   webpack: (config, { buildId, dev, isServer, defaultLoaders, nextRuntime, webpack }) => {
     // Important: return the modified config
     config.module.rules.push({

@@ -1,0 +1,25 @@
+name = "livekit-meet"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = ".open-next"
+
+[env.production]
+vars = { ENVIRONMENT = "production" }
+
+# Environment variables (secrets) should be set via:
+# wrangler pages secret put LIVEKIT_API_KEY --env production
+# wrangler pages secret put LIVEKIT_API_SECRET --env production
+# Or via Cloudflare Dashboard:
+# Pages → Settings → Environment variables → Production
+#
+# Required secrets:
+# - LIVEKIT_API_KEY
+# - LIVEKIT_API_SECRET
+# - LIVEKIT_URL (can be plain text)
+#
+# Optional secrets for recording functionality:
+# - S3_KEY_ID
+# - S3_KEY_SECRET
+# - S3_BUCKET
+# - S3_ENDPOINT
+# - S3_REGION

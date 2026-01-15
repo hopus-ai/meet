@@ -1,0 +1,14 @@
+# LiveKit Configuration
+# Copy this file to .dev.vars and fill in your values
+# These are used for local development with wrangler
+
+LIVEKIT_API_KEY=your_api_key_here
+LIVEKIT_API_SECRET=your_api_secret_here
+LIVEKIT_URL=wss://your-livekit-server.livekit.cloud
+
+# Optional: S3 Configuration for Recording
+# S3_KEY_ID=your_s3_key_id
+# S3_KEY_SECRET=your_s3_key_secret
+# S3_BUCKET=your_bucket_name
+# S3_ENDPOINT=https://s3.amazonaws.com
+# S3_REGION=us-east-1
