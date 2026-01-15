@@ -63,30 +63,38 @@ export function SettingsMenu(props: SettingsMenuProps) {
 
   const toggleRoomRecording = async () => {
     if (!recordingEndpoint) {
-      throw TypeError('No recording endpoint specified');
+      alert('Recording endpoint not configured');
+      return;
     }
     if (room.isE2EEEnabled) {
-      throw Error('Recording of encrypted meetings is currently not supported');
+      alert('Recording of encrypted meetings is currently not supported');
+      return;
     }
     setProcessingRecRequest(true);
     setInitialRecStatus(isRecording);
 
     // Get the participant's identity to send for server-side validation
     const identity = room.localParticipant?.identity;
+    console.log('Recording request:', { roomName: room.name, identity, isRecording });
 
-    let response: Response;
-    if (isRecording) {
-      response = await fetch(recordingEndpoint + `/stop?roomName=${room.name}&identity=${encodeURIComponent(identity || '')}`);
-    } else {
-      response = await fetch(recordingEndpoint + `/start?roomName=${room.name}&identity=${encodeURIComponent(identity || '')}`);
-    }
-    if (response.ok) {
-    } else {
-      console.error(
-        'Error handling recording request, check server logs:',
-        response.status,
-        response.statusText,
-      );
+    try {
+      let response: Response;
+      if (isRecording) {
+        response = await fetch(recordingEndpoint + `/stop?roomName=${room.name}&identity=${encodeURIComponent(identity || '')}`);
+      } else {
+        response = await fetch(recordingEndpoint + `/start?roomName=${room.name}&identity=${encodeURIComponent(identity || '')}`);
+      }
+
+      const responseText = await response.text();
+      console.log('Recording response:', response.status, responseText);
+
+      if (!response.ok) {
+        alert(`Recording failed: ${responseText}`);
+        setProcessingRecRequest(false);
+      }
+    } catch (error) {
+      console.error('Recording error:', error);
+      alert(`Recording error: ${error instanceof Error ? error.message : 'Unknown error'}`);
       setProcessingRecRequest(false);
     }
   };
