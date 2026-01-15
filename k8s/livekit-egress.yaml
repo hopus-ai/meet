@@ -1,0 +1,178 @@
+# LiveKit Egress Deployment for Hopus Meet
+# Runs on AMD64 (x86) nodes - Chrome doesn't work on ARM64 in containers
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: livekit-egress-config
+  namespace: hopusai
+data:
+  config.yaml: |
+    # LiveKit Egress Configuration
+
+    # LiveKit Server Connection
+    api_key: APIQDy8D8bGRTob
+    api_secret: V66DsN8CYdGWrZfXfgqcOr7KcGLRQfEq
+    # Use Lambda Labs edge via hostname (resolved via hostAliases in pod)
+    # Chrome needs valid hostname for SSL certificate validation
+    ws_url: wss://livekit.hopus.ai:30765
+
+    # Health check and metrics
+    health_port: 8080
+    prometheus_port: 9090
+
+    # Redis (same as LiveKit server)
+    redis:
+      address: redis-hopusai.hopusai.svc.cluster.local:6379
+      db: 0
+      password: hopusai-redis-2026-prod
+
+    # S3 Storage (Cloudflare R2)
+    s3:
+      access_key: ${S3_ACCESS_KEY}
+      secret: ${S3_SECRET_KEY}
+      region: auto
+      endpoint: https://450e01c6b878357ff7bccd2d4b23123e.r2.cloudflarestorage.com
+      bucket: hopus-meet-recordings
+      force_path_style: true
+
+    # Chrome/Chromium settings for recording
+    insecure: false
+    # Disable sandbox for container environments
+    enable_chrome_sandbox: false
+
+    # Debug logging
+    log_level: debug
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: livekit-egress-secrets
+  namespace: hopusai
+type: Opaque
+stringData:
+  S3_ACCESS_KEY: "172d4489ecd8ddc6960c1faa42c7f718"
+  S3_SECRET_KEY: "a5c52a1c3ede712c90fd36d425c93007d468445d4d7013568c665e41b954efb1"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: livekit-egress
+  namespace: hopusai
+  labels:
+    app: livekit-egress
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: livekit-egress
+  template:
+    metadata:
+      labels:
+        app: livekit-egress
+    spec:
+      # Run on AMD64 (x86) nodes - Chrome doesn't work reliably on ARM64
+      nodeSelector:
+        kubernetes.io/arch: amd64
+
+      # Override DNS to route livekit.hopus.ai to Lambda Labs edge IP
+      # This allows Chrome to connect with valid SSL certificate
+      hostAliases:
+        - ip: "192.222.50.16"
+          hostnames:
+            - "livekit.hopus.ai"
+
+      # Security context for Chrome sandbox
+      securityContext:
+        runAsNonRoot: false
+
+      containers:
+        - name: egress
+          image: livekit/egress:latest
+          imagePullPolicy: Always
+
+          # Required for Chrome sandbox
+          securityContext:
+            capabilities:
+              add:
+                - SYS_ADMIN
+
+          ports:
+            - name: health
+              containerPort: 8080
+              protocol: TCP
+            - name: metrics
+              containerPort: 9090
+              protocol: TCP
+
+          env:
+            - name: EGRESS_CONFIG_FILE
+              value: /etc/egress/config.yaml
+            - name: S3_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: livekit-egress-secrets
+                  key: S3_ACCESS_KEY
+            - name: S3_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: livekit-egress-secrets
+                  key: S3_SECRET_KEY
+
+          volumeMounts:
+            - name: config
+              mountPath: /etc/egress
+              readOnly: true
+
+          resources:
+            requests:
+              cpu: "2"
+              memory: "4Gi"
+            limits:
+              cpu: "4"
+              memory: "8Gi"
+
+          livenessProbe:
+            httpGet:
+              path: /
+              port: health
+            initialDelaySeconds: 30
+            periodSeconds: 10
+
+          readinessProbe:
+            httpGet:
+              path: /
+              port: health
+            initialDelaySeconds: 10
+            periodSeconds: 5
+
+      volumes:
+        - name: config
+          configMap:
+            name: livekit-egress-config
+
+      # Graceful shutdown (wait for ongoing recordings)
+      terminationGracePeriodSeconds: 3600
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: livekit-egress
+  namespace: hopusai
+  labels:
+    app: livekit-egress
+spec:
+  selector:
+    app: livekit-egress
+  ports:
+    - name: health
+      port: 8080
+      targetPort: 8080
+    - name: metrics
+      port: 9090
+      targetPort: 9090
+  type: ClusterIP

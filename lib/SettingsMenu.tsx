@@ -58,13 +58,10 @@ export function SettingsMenu(props: SettingsMenuProps) {
   // Use local state if set, otherwise fall back to LiveKit state
   const isRecording = localRecordingState !== null ? localRecordingState : livekitIsRecording;
 
-  console.log('Recording state:', { livekitIsRecording, localRecordingState, isRecording });
-
   // Sync local state with LiveKit state when LiveKit catches up
   React.useEffect(() => {
     // Only clear local override when LiveKit has caught up to our expected state
     if (localRecordingState !== null && livekitIsRecording === localRecordingState) {
-      console.log('LiveKit caught up, clearing local override');
       setLocalRecordingState(null);
     }
   }, [livekitIsRecording, localRecordingState]);
@@ -82,7 +79,6 @@ export function SettingsMenu(props: SettingsMenuProps) {
 
     // Get the participant's identity to send for server-side validation
     const identity = room.localParticipant?.identity;
-    console.log('Recording request:', { roomName: room.name, identity, isRecording });
 
     try {
       let response: Response;
@@ -93,20 +89,16 @@ export function SettingsMenu(props: SettingsMenuProps) {
       }
 
       const responseText = await response.text();
-      console.log('Recording response:', response.status, responseText);
 
       if (response.ok) {
         // Update local state immediately for responsive UI
-        const newState = !isRecording;
-        console.log('Recording success, setting state to:', newState, 'was:', isRecording);
-        setLocalRecordingState(newState);
+        setLocalRecordingState(!isRecording);
         setProcessingRecRequest(false);
       } else {
         alert(`Recording failed: ${responseText}`);
         setProcessingRecRequest(false);
       }
     } catch (error) {
-      console.error('Recording error:', error);
       alert(`Recording error: ${error instanceof Error ? error.message : 'Unknown error'}`);
       setProcessingRecRequest(false);
     }
