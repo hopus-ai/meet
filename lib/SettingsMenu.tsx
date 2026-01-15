@@ -51,15 +51,21 @@ export function SettingsMenu(props: SettingsMenuProps) {
   );
   const [activeTab, setActiveTab] = React.useState(tabs[0]);
 
-  const isRecording = useIsRecording();
-  const [initialRecStatus, setInitialRecStatus] = React.useState(isRecording);
+  const livekitIsRecording = useIsRecording();
+  const [localRecordingState, setLocalRecordingState] = React.useState<boolean | null>(null);
   const [processingRecRequest, setProcessingRecRequest] = React.useState(false);
 
+  // Use local state if set, otherwise fall back to LiveKit state
+  const isRecording = localRecordingState !== null ? localRecordingState : livekitIsRecording;
+
+  // Sync local state with LiveKit state when it changes
   React.useEffect(() => {
-    if (initialRecStatus !== isRecording) {
+    if (livekitIsRecording !== localRecordingState && localRecordingState !== null) {
+      // LiveKit state caught up, clear local override
+      setLocalRecordingState(null);
       setProcessingRecRequest(false);
     }
-  }, [isRecording, initialRecStatus]);
+  }, [livekitIsRecording, localRecordingState]);
 
   const toggleRoomRecording = async () => {
     if (!recordingEndpoint) {
@@ -71,7 +77,6 @@ export function SettingsMenu(props: SettingsMenuProps) {
       return;
     }
     setProcessingRecRequest(true);
-    setInitialRecStatus(isRecording);
 
     // Get the participant's identity to send for server-side validation
     const identity = room.localParticipant?.identity;
@@ -88,7 +93,11 @@ export function SettingsMenu(props: SettingsMenuProps) {
       const responseText = await response.text();
       console.log('Recording response:', response.status, responseText);
 
-      if (!response.ok) {
+      if (response.ok) {
+        // Update local state immediately for responsive UI
+        setLocalRecordingState(!isRecording);
+        setProcessingRecRequest(false);
+      } else {
         alert(`Recording failed: ${responseText}`);
         setProcessingRecRequest(false);
       }
