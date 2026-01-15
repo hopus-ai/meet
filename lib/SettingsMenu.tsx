@@ -58,6 +58,8 @@ export function SettingsMenu(props: SettingsMenuProps) {
   // Use local state if set, otherwise fall back to LiveKit state
   const isRecording = localRecordingState !== null ? localRecordingState : livekitIsRecording;
 
+  console.log('Recording state:', { livekitIsRecording, localRecordingState, isRecording });
+
   // Sync local state with LiveKit state when it changes
   React.useEffect(() => {
     if (livekitIsRecording !== localRecordingState && localRecordingState !== null) {
@@ -95,7 +97,9 @@ export function SettingsMenu(props: SettingsMenuProps) {
 
       if (response.ok) {
         // Update local state immediately for responsive UI
-        setLocalRecordingState(!isRecording);
+        const newState = !isRecording;
+        console.log('Recording success, setting state to:', newState, 'was:', isRecording);
+        setLocalRecordingState(newState);
         setProcessingRecRequest(false);
       } else {
         alert(`Recording failed: ${responseText}`);
