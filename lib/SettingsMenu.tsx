@@ -24,12 +24,26 @@ export function SettingsMenu(props: SettingsMenuProps) {
   const room = useRoomContext();
   const recordingEndpoint = process.env.NEXT_PUBLIC_LK_RECORD_ENDPOINT;
 
+  // Check if the local participant has recording permission
+  const canRecord = React.useMemo(() => {
+    try {
+      const metadata = room.localParticipant?.metadata;
+      if (metadata) {
+        const parsed = JSON.parse(metadata);
+        return parsed.canRecord === true;
+      }
+    } catch {
+      // Invalid metadata, default to no permission
+    }
+    return false;
+  }, [room.localParticipant?.metadata]);
+
   const settings = React.useMemo(() => {
     return {
       media: { camera: true, microphone: true, label: 'Media Devices', speaker: true },
-      recording: recordingEndpoint ? { label: 'Recording' } : undefined,
+      recording: recordingEndpoint && canRecord ? { label: 'Recording' } : undefined,
     };
-  }, []);
+  }, [canRecord]);
 
   const tabs = React.useMemo(
     () => Object.keys(settings).filter((t) => t !== undefined) as Array<keyof typeof settings>,
@@ -56,11 +70,15 @@ export function SettingsMenu(props: SettingsMenuProps) {
     }
     setProcessingRecRequest(true);
     setInitialRecStatus(isRecording);
+
+    // Get the participant's identity to send for server-side validation
+    const identity = room.localParticipant?.identity;
+
     let response: Response;
     if (isRecording) {
-      response = await fetch(recordingEndpoint + `/stop?roomName=${room.name}`);
+      response = await fetch(recordingEndpoint + `/stop?roomName=${room.name}&identity=${encodeURIComponent(identity || '')}`);
     } else {
-      response = await fetch(recordingEndpoint + `/start?roomName=${room.name}`);
+      response = await fetch(recordingEndpoint + `/start?roomName=${room.name}&identity=${encodeURIComponent(identity || '')}`);
     }
     if (response.ok) {
     } else {

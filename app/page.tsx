@@ -12,9 +12,9 @@ function StartMeeting() {
 
   const startMeeting = () => {
     if (e2ee) {
-      router.push(`/rooms/${generateRoomId()}#${encodePassphrase(sharedPassphrase)}`);
+      router.push(`/rooms/${generateRoomId()}?creator=true#${encodePassphrase(sharedPassphrase)}`);
     } else {
-      router.push(`/rooms/${generateRoomId()}`);
+      router.push(`/rooms/${generateRoomId()}?creator=true`);
     }
   };
 

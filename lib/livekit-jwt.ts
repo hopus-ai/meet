@@ -107,3 +107,54 @@ export function generateRandomAlphanumeric(length: number): string {
   }
   return result;
 }
+
+/**
+ * Decoded token payload with metadata
+ */
+export interface DecodedTokenPayload {
+  sub: string; // identity
+  name?: string;
+  metadata?: string;
+  video?: VideoGrant;
+  iss: string;
+  nbf: number;
+  exp: number;
+}
+
+/**
+ * Verify and decode a LiveKit JWT token
+ *
+ * @param token - JWT token string
+ * @param apiSecret - LiveKit API secret for verification
+ * @returns Decoded payload or null if invalid
+ */
+export async function verifyLiveKitToken(
+  token: string,
+  apiSecret: string
+): Promise<DecodedTokenPayload | null> {
+  try {
+    const isValid = await jwt.verify(token, apiSecret);
+    if (!isValid) {
+      return null;
+    }
+
+    const decoded = jwt.decode(token);
+    return decoded.payload as DecodedTokenPayload;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Extract metadata from a verified token
+ */
+export function extractMetadataFromToken(payload: DecodedTokenPayload): Record<string, unknown> | null {
+  try {
+    if (payload.metadata) {
+      return JSON.parse(payload.metadata);
+    }
+  } catch {
+    // Invalid metadata JSON
+  }
+  return null;
+}

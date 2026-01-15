@@ -15,8 +15,8 @@ export async function GET(request: NextRequest) {
     // Parse query parameters
     const roomName = request.nextUrl.searchParams.get('roomName');
     const participantName = request.nextUrl.searchParams.get('participantName');
-    const metadata = request.nextUrl.searchParams.get('metadata') ?? '';
     const region = request.nextUrl.searchParams.get('region');
+    const isCreator = request.nextUrl.searchParams.get('creator') === 'true';
     if (!LIVEKIT_URL) {
       throw new Error('LIVEKIT_URL is not defined');
     }
@@ -32,6 +32,11 @@ export async function GET(request: NextRequest) {
     if (participantName === null) {
       return new NextResponse('Missing required query parameter: participantName', { status: 400 });
     }
+
+    // Build metadata with permissions
+    const metadata = JSON.stringify({
+      canRecord: isCreator,
+    });
 
     // Generate participant token
     if (!randomParticipantPostfix) {

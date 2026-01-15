@@ -12,6 +12,7 @@ export default async function Page({
     region?: string;
     hq?: string;
     codec?: string;
+    creator?: string;
   }>;
 }) {
   const _params = await params;
@@ -21,6 +22,7 @@ export default async function Page({
       ? _searchParams.codec
       : 'vp9';
   const hq = _searchParams.hq === 'true' ? true : false;
+  const isCreator = _searchParams.creator === 'true';
 
   return (
     <PageClientImpl
@@ -28,6 +30,7 @@ export default async function Page({
       region={_searchParams.region}
       hq={hq}
       codec={codec}
+      isCreator={isCreator}
     />
   );
 }

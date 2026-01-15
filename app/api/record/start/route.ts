@@ -1,19 +1,17 @@
-import { EgressClient, EncodedFileOutput, S3Upload } from 'livekit-server-sdk';
+import { EgressClient, EgressStatus } from '@/lib/livekit-egress';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
   try {
     const roomName = req.nextUrl.searchParams.get('roomName');
-
-    /**
-     * CAUTION:
-     * for simplicity this implementation does not authenticate users and therefore allows anyone with knowledge of a roomName
-     * to start/stop recordings for that room.
-     * DO NOT USE THIS FOR PRODUCTION PURPOSES AS IS
-     */
+    const identity = req.nextUrl.searchParams.get('identity');
 
     if (roomName === null) {
       return new NextResponse('Missing roomName parameter', { status: 403 });
+    }
+
+    if (!identity) {
+      return new NextResponse('Missing identity parameter', { status: 403 });
     }
 
     const {
@@ -27,44 +25,68 @@ export async function GET(req: NextRequest) {
       S3_REGION,
     } = process.env;
 
-    const hostURL = new URL(LIVEKIT_URL!);
-    hostURL.protocol = 'https:';
+    if (!LIVEKIT_API_KEY || !LIVEKIT_API_SECRET || !LIVEKIT_URL) {
+      return new NextResponse('LiveKit configuration missing', { status: 500 });
+    }
 
-    const egressClient = new EgressClient(hostURL.origin, LIVEKIT_API_KEY, LIVEKIT_API_SECRET);
+    if (!S3_KEY_ID || !S3_KEY_SECRET || !S3_BUCKET || !S3_ENDPOINT) {
+      return new NextResponse('S3 storage configuration missing', { status: 500 });
+    }
 
+    const egressClient = new EgressClient(LIVEKIT_URL, LIVEKIT_API_KEY, LIVEKIT_API_SECRET);
+
+    // Verify recording permission
+    const hasPermission = await egressClient.checkRecordingPermission(roomName, identity);
+    if (!hasPermission) {
+      return new NextResponse('Recording permission denied', { status: 403 });
+    }
+
+    // Check for existing active recordings
     const existingEgresses = await egressClient.listEgress({ roomName });
-    if (existingEgresses.length > 0 && existingEgresses.some((e) => e.status < 2)) {
+    const activeEgress = existingEgresses.find(
+      (e) => e.status === EgressStatus.EGRESS_STARTING || e.status === EgressStatus.EGRESS_ACTIVE
+    );
+
+    if (activeEgress) {
       return new NextResponse('Meeting is already being recorded', { status: 409 });
     }
 
-    const fileOutput = new EncodedFileOutput({
-      filepath: `${new Date(Date.now()).toISOString()}-${roomName}.mp4`,
-      output: {
-        case: 's3',
-        value: new S3Upload({
-          endpoint: S3_ENDPOINT,
-          accessKey: S3_KEY_ID,
-          secret: S3_KEY_SECRET,
-          region: S3_REGION,
-          bucket: S3_BUCKET,
-        }),
-      },
-    });
+    // Generate filename with timestamp
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const filepath = `recordings/${roomName}/${timestamp}.mp4`;
 
+    // Start room composite egress
     await egressClient.startRoomCompositeEgress(
       roomName,
       {
-        file: fileOutput,
+        file: {
+          filepath,
+          fileType: 'MP4',
+          s3: {
+            accessKey: S3_KEY_ID,
+            secret: S3_KEY_SECRET,
+            bucket: S3_BUCKET,
+            endpoint: S3_ENDPOINT,
+            region: S3_REGION || 'auto',
+            forcePathStyle: true,
+          },
+        },
       },
       {
         layout: 'speaker',
-      },
+        preset: 'H264_720P_30',
+      }
     );
 
-    return new NextResponse(null, { status: 200 });
+    return new NextResponse(JSON.stringify({ message: 'Recording started', filepath }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
   } catch (error) {
+    console.error('Error starting recording:', error);
     if (error instanceof Error) {
       return new NextResponse(error.message, { status: 500 });
     }
+    return new NextResponse('Unknown error', { status: 500 });
   }
 }
