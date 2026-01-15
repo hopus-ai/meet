@@ -52,16 +52,39 @@ footer {
 
 footer a,
 h2 a {
-  color: #ff6352;
-  text-decoration-color: #a33529;
+  color: #8b5cf6;
+  text-decoration-color: #5d00de;
   text-underline-offset: 0.125em;
 }
 
 footer a:hover,
 h2 a {
-  text-decoration-color: #ff6352;
+  text-decoration-color: #8b5cf6;
 }
 
 h2 a {
   text-decoration: none;
+}
+
+/* Hopus Brand Colors */
+:root {
+  --hopus-primary: #5d00de;
+  --hopus-primary-light: #8b5cf6;
+  --hopus-primary-dark: #4c00b5;
+}
+
+/* Override LiveKit button colors */
+[data-lk-theme="default"] .lk-button[aria-pressed="true"],
+[data-lk-theme="default"] .lk-button:hover {
+  background-color: var(--hopus-primary) !important;
+  border-color: var(--hopus-primary) !important;
+}
+
+[data-lk-theme="default"] .lk-button {
+  border-color: var(--hopus-primary-light);
+}
+
+/* Focus states */
+[data-lk-theme="default"] .lk-button:focus-visible {
+  outline-color: var(--hopus-primary-light);
 }

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <!-- Primary Meta Tags -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>Chatbot WhatsApp com IA para Empresas | Hopus.ai - Automacao de Atendimento 24/7</title>
+    <meta name="title" content="Chatbot WhatsApp com IA para Empresas | Hopus.ai - Automacao de Atendimento 24/7" />
+    <meta name="description" content="Automatize seu atendimento no WhatsApp com IA. Responda clientes 24/7, capture leads, agende consultas e aumente vendas. Ideal para clinicas, saloes, imobiliarias e academias. Teste gratis!" />
+    <meta name="keywords" content="chatbot whatsapp empresas, automacao atendimento whatsapp, agente ia whatsapp, bot agendar consultas, crm whatsapp integrado, chatbot clinica medica, automacao vendas whatsapp, responder whatsapp automaticamente, inteligencia artificial atendimento, sistema agendamento automatico" />
+    <meta name="author" content="Hopus.ai" />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="Portuguese" />
+    <meta name="revisit-after" content="7 days" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://hopus.ai/" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://hopus.ai/" />
+    <meta property="og:title" content="Chatbot WhatsApp com IA | Automatize Atendimento 24/7" />
+    <meta property="og:description" content="Automatize seu atendimento no WhatsApp com IA. Responda clientes 24/7, capture leads e agende consultas automaticamente. Ideal para clinicas, saloes e imobiliarias." />
+    <meta property="og:image" content="https://hopus.ai/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Hopus.ai - Chatbot WhatsApp com Inteligencia Artificial" />
+    <meta property="og:site_name" content="Hopus.ai" />
+    <meta property="og:locale" content="pt_BR" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://hopus.ai/" />
+    <meta name="twitter:title" content="Chatbot WhatsApp com IA | Automatize Atendimento 24/7" />
+    <meta name="twitter:description" content="Automatize seu atendimento no WhatsApp com IA. Responda clientes 24/7, capture leads e agende consultas automaticamente." />
+    <meta name="twitter:image" content="https://hopus.ai/og-image.png" />
+    <meta name="twitter:image:alt" content="Hopus.ai - Chatbot WhatsApp com Inteligencia Artificial" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#5d00de" />
+    <meta name="msapplication-TileColor" content="#5d00de" />
+
+    <!-- Preconnect to external domains for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Google Fonts - Inter -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+    </noscript>
+
+    <!-- Structured Data / JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Hopus.ai",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "description": "Agente de IA que conversa com seus clientes, responde duvidas, capta leads, agenda compromissos e gerencia todo o processo ate a conversao.",
+      "url": "https://hopus.ai",
+      "author": {
+        "@type": "Organization",
+        "name": "Hopus.ai LTDA",
+        "url": "https://hopus.ai"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "BRL"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "ratingCount": "150"
+      }
+    }
+    </script>
+
+    <!-- Organization Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Hopus.ai",
+      "url": "https://hopus.ai",
+      "logo": "https://hopus.ai/logo.png",
+      "description": "Chatbot WhatsApp com IA para automacao de atendimento empresarial",
+      "foundingDate": "2024",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "BR"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "availableLanguage": ["Portuguese"]
+      },
+      "sameAs": [
+        "https://www.linkedin.com/company/hopusai",
+        "https://www.instagram.com/hopus.ai"
+      ]
+    }
+    </script>
+
+    <!-- FAQ Schema - Important for Rich Snippets -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "O que e o Hopus.ai?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Hopus.ai e um agente de inteligencia artificial que automatiza o atendimento ao cliente via WhatsApp. Ele responde mensagens 24/7, captura leads, agenda consultas e gerencia todo o processo de vendas automaticamente."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Como funciona o chatbot WhatsApp do Hopus?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Voce conecta seu WhatsApp Business ao Hopus, configura as respostas e regras de atendimento, e o agente de IA comeca a responder seus clientes automaticamente. Ele entende contexto, agenda compromissos e qualifica leads sem intervencao humana."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quanto custa o Hopus.ai?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "O Hopus oferece planos a partir de R$97/mes com teste gratuito. Os precos variam conforme o volume de conversas e recursos necessarios para seu negocio."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Para quais tipos de negocios o Hopus e indicado?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "O Hopus e ideal para clinicas medicas, saloes de beleza, barbearias, imobiliarias, academias, restaurantes, escolas, oficinas mecanicas e qualquer negocio que precise automatizar atendimento e agendamentos."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Preciso saber programar para usar o Hopus?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Nao! O Hopus foi criado para ser simples. Voce configura tudo em poucos minutos atraves de uma interface intuitiva, sem necessidade de conhecimentos tecnicos ou desenvolvedores."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "O Hopus funciona 24 horas por dia?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sim! O agente de IA do Hopus funciona 24 horas por dia, 7 dias por semana, respondendo clientes mesmo fora do horario comercial, feriados e finais de semana."
+          }
+        }
+      ]
+    }
+    </script>
+
+    <!-- Service Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "serviceType": "Chatbot WhatsApp com Inteligencia Artificial",
+      "provider": {
+        "@type": "Organization",
+        "name": "Hopus.ai"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "Brasil"
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Planos Hopus.ai",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Automacao de Atendimento WhatsApp"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Captura e Qualificacao de Leads"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Agendamento Automatico"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Mini CRM Integrado"
+            }
+          }
+        ]
+      }
+    }
+    </script>
+
+    <!-- BreadcrumbList Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://hopus.ai/"
+        }
+      ]
+    }
+    </script>
+    <script type="module" crossorigin src="/assets/js/index-CnMlAzqG.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/js/react-vendor-DoaKO8ol.js">
+    <link rel="modulepreload" crossorigin href="/assets/js/seo-vendor-DaylG2zm.js">
+    <link rel="modulepreload" crossorigin href="/assets/js/icons-vendor-DFPHjGlC.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-BfxKp84z.css">
+  </head>
+
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

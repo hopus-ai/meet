@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#111111"/>
+
+  <!-- Gradient overlay -->
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#5d00de;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#111111;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#grad1)"/>
+
+  <!-- Hopus Icon (larger) -->
+  <g transform="translate(500, 180)">
+    <rect width="80" height="80" rx="16" fill="#5d00de"/>
+    <path d="M40 10c-15 0-30 12-30 30s15 30 30 30 30-12 30-30-15-30-30-30zm0 52c-12 0-22-10-22-22s10-22 22-22 22 10 22 22-10 22-22 22z" fill="white"/>
+    <path d="M40 22c-10 0-18 8-18 18s8 18 18 18 18-8 18-18-8-18-18-18zm0 30c-6.6 0-12-5.4-12-12s5.4-12 12-12 12 5.4 12 12-5.4 12-12 12z" fill="white" opacity="0.7"/>
+    <circle cx="40" cy="40" r="6" fill="white"/>
+  </g>
+
+  <!-- Text -->
+  <text x="600" y="340" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="700" fill="white" text-anchor="middle">Hopus Meet</text>
+
+  <!-- Tagline -->
+  <text x="600" y="420" font-family="system-ui, -apple-system, sans-serif" font-size="28" fill="rgba(255,255,255,0.7)" text-anchor="middle">Videoconferência Empresarial Segura</text>
+
+  <!-- URL -->
+  <text x="600" y="560" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#8b5cf6" text-anchor="middle">meet.hopus.ai</text>
+</svg>
